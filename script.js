@@ -238,15 +238,43 @@ function startTimer(button) {
 }
 
 function addStickyNote() {
-  const noteHTML = `<div><h3>📝 Sticky Note</h3><textarea class="sticky-note-textarea" style="width: 100%; height: 100px;"></textarea></div>`;
+  const noteHTML = `
+    <div>
+      <h3 contenteditable="true" class="editable-title">📝 Sticky Note</h3>
+      <div>
+        <button onclick="changeFontSize(this, 1)">🔼</button>
+        <button onclick="changeFontSize(this, -1)">🔽</button>
+      </div>
+      <textarea class="sticky-note-textarea" style="width: 100%; height: 100px; font-size: 16px;"></textarea>
+    </div>`;
   createWidget(noteHTML);
   attachNoteListeners();
 }
 
+
 function addPoints() {
-  const pointsHTML = `<div><h3>🏆 Points Tracker</h3><div class="points-score">0</div><button onclick="changePoints(this, 1)">+1</button><button onclick="changePoints(this, -1)">-1</button></div>`;
+  const pointsHTML = `
+    <div>
+      <h3 contenteditable="true" class="editable-title">🏆 Enter Name</h3>
+      <div class="points-score">0</div>
+      <button onclick="changePoints(this, 1)">+1</button>
+      <button onclick="changePoints(this, -1)">-1</button>
+    </div>`;
   createWidget(pointsHTML);
 }
+
+function changeFontSize(button, direction) {
+  const container = button.closest('div').parentElement;
+  const textarea = container.querySelector('textarea');
+  const style = window.getComputedStyle(textarea);
+  const fontSize = parseFloat(style.fontSize);
+
+  let newFontSize = fontSize + (direction * 2); // 2px bigger/smaller
+  newFontSize = Math.max(8, Math.min(newFontSize, 48)); // Limit range
+
+  textarea.style.fontSize = `${newFontSize}px`;
+}
+
 
 function changePoints(button, amount) {
   const scoreDiv = button.parentElement.querySelector('.points-score');
