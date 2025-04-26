@@ -1,4 +1,4 @@
-import fetch from 'node-fetch'; // 👈 ADD THIS LINE at the very top
+import axios from 'axios'; // 👈 NOW using axios instead of fetch
 
 export default async function handler(req, res) {
   const apiKey = '27654027f6761d87e2a5143e7733d7c9';
@@ -8,15 +8,9 @@ export default async function handler(req, res) {
   const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,daily,alerts&units=metric&appid=${apiKey}`;
 
   try {
-    const response = await fetch(url);
+    const response = await axios.get(url); // 👈 Axios way
 
-    if (!response.ok) {
-      console.error('API Request Failed:', response.status, response.statusText);
-      res.status(500).json({ error: 'API request failed' });
-      return;
-    }
-
-    const data = await response.json();
+    const data = response.data;
 
     const result = {
       temp: Math.round(data.current.temp),
@@ -28,7 +22,7 @@ export default async function handler(req, res) {
 
     res.status(200).json(result);
   } catch (error) {
-    console.error('Server error:', error);
+    console.error('Server error:', error.message);
     res.status(500).json({ error: 'Unable to fetch weather data' });
   }
 }
