@@ -207,5 +207,6 @@ window.addEventListener('load', () => {
   setInterval(updateWeather, 600000);
 
   loadNotesFromFirebase();
-  setupSoundMeter();
+  setupSoundMeter(); // <- Now safely loading after everything else
 });
+
