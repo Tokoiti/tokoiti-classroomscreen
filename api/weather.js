@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default async function handler(req, res) {
-  const apiKey = '27654027f6761d87e2a5143e7733d7c9'; // Your OpenWeather API Key
+  const apiKey = '957e0ce5c5f365340f2ecfa841f4c127'; // Your OpenWeather API Key
   const lat = '-46.1213'; // Tokoiti School latitude
   const lon = '169.9609'; // Tokoiti School longitude
 
