@@ -40,11 +40,11 @@ async function updateWeather() {
     const pop = data.pop;
     const icon = data.icon;
 
-    const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+    const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`; // 🌦️ Here's the icon URL
 
     const weatherElement = document.getElementById('weather');
     weatherElement.innerHTML = `
-      <img src="${iconUrl}" alt="${description}" style="vertical-align: middle; width: 30px; height: 30px;">
+      <img src="${iconUrl}" alt="${description}" style="vertical-align: middle; width: 30px; height: 30px; margin-right: 8px;">
       ${temp}°C ${description} - UV ${uvIndex} - Rain ${pop}%
     `;
   } catch (error) {
@@ -53,6 +53,7 @@ async function updateWeather() {
     weatherElement.textContent = `Weather unavailable`;
   }
 }
+
 
 
 
