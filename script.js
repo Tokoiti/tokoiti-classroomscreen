@@ -31,22 +31,29 @@ function updateClockAndDate() {
 
 async function updateWeather() {
   try {
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=-46.1213&lon=169.9609&units=metric&appid=27654027f6761d87e2a5143e7733d7c9`);
+    const response = await fetch('/api/weather');
     const data = await response.json();
 
-    const temp = Math.round(data.main.temp);
-    const description = data.weather[0].main;
-    const uvIndex = 'n/a'; // Because basic weather API doesn't give UV - we'll add later if needed.
-    const pop = 'n/a'; // No rain chance either — but we can fake it smart later.
+    const temp = data.temp;
+    const description = data.description;
+    const uvIndex = data.uvIndex;
+    const pop = data.pop;
+    const icon = data.icon;
+
+    const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
 
     const weatherElement = document.getElementById('weather');
-    weatherElement.textContent = `${temp}°C ${description} - UV ${uvIndex} - Rain ${pop}`;
+    weatherElement.innerHTML = `
+      <img src="${iconUrl}" alt="${description}" style="vertical-align: middle; width: 30px; height: 30px;">
+      ${temp}°C ${description} - UV ${uvIndex} - Rain ${pop}%
+    `;
   } catch (error) {
     console.error('Weather fetch error:', error);
     const weatherElement = document.getElementById('weather');
     weatherElement.textContent = `Weather unavailable`;
   }
 }
+
 
 
 function saveNotesToFirebase() {
