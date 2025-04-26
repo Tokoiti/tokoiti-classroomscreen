@@ -1,0 +1,109 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f0f4f8;
+  overflow-x: hidden;
+}
+
+#top-bar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem;
+  font-size: 1.5rem;
+  z-index: 1000;
+}
+
+#clock, #date, #weather {
+  margin: 0 10px;
+  white-space: nowrap;
+}
+
+main {
+  margin-top: 120px;
+  padding: 1rem;
+}
+
+#widget-menu {
+  margin-top: 10px;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#widget-menu button, #clear-notes-button {
+  padding: 10px 15px;
+  font-size: 1rem;
+  border: none;
+  background: #0078d7;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#clear-notes-button {
+  background: #d9534f;
+}
+
+#clear-notes-button:hover {
+  background: #c9302c;
+}
+
+#widget-menu button:hover {
+  background: #005bb5;
+}
+
+.widgets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.widget-card {
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  padding: 15px;
+  position: relative;
+}
+
+.widget-close {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #777;
+}
+
+.widget-close:hover {
+  color: red;
+}
+
+footer#sound-meter {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #e0e0e0;
+  height: 20px;
+}
+
+#sound-bar {
+  height: 100%;
+  width: 0;
+  background: green;
+  transition: width 0.2s, background 0.2s;
+}

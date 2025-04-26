@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tokoiti Classroom Screen</title>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-database-compat.js"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header id="top-bar">
+    <div id="clock"></div>
+    <div id="date"></div>
+    <div id="weather"></div>
+  </header>
+
+  <main id="widget-area">
+    <button id="add-widget-button">➕ Add Widget</button>
+    <div id="widget-menu" style="display: none;">
+      <button onclick="addTimer()">⏰ Add Timer</button>
+      <button onclick="addStickyNote()">📝 Add Sticky Note</button>
+      <button onclick="addPoints()">🏆 Add Points Tracker</button>
+      <button onclick="addGroupMaker()">👥 Add Group Maker</button>
+    </div>
+    <button id="clear-notes-button" style="margin-top:10px;">🧹 Clear All Sticky Notes</button>
+    <div id="widgets" class="widgets-grid"></div>
+  </main>
+
+  <footer id="sound-meter">
+    <div id="sound-bar"></div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
