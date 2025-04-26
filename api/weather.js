@@ -1,30 +1,24 @@
-import axios from 'axios';
-
-export default async function handler(req, res) {
-  const apiKey = '27654027f6761d87e2a5143e7733d7c9'; // Your API key
-  const lat = '-46.1213'; // Tokoiti School
-  const lon = '169.9609';
-
-  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`;
-
+async function updateWeather() {
   try {
-    console.log("Requesting weather data from:", url);
+    const response = await fetch('/api/weather');
+    const data = await response.json();
 
-    const response = await axios.get(url);
-    const data = response.data;
+    const temp = data.temp;
+    const description = data.description;
+    const uvIndex = data.uvIndex;
+    const pop = data.pop;
+    const icon = data.icon;
 
-    const result = {
-      temp: Math.round(data.main.temp),
-      description: data.weather[0].main,
-      uvIndex: "N/A", // (Not available from this endpoint — optional)
-      pop: "N/A", // (No rain probability in this endpoint — optional)
-      icon: data.weather[0].icon
-    };
+    const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`; // 🌦️ Here's the icon URL
 
-    res.status(200).json(result);
+    const weatherElement = document.getElementById('weather');
+    weatherElement.innerHTML = `
+      <img src="${iconUrl}" alt="${description}" style="vertical-align: middle; width: 30px; height: 30px; margin-right: 8px;">
+      ${temp}°C ${description} - UV ${uvIndex} - Rain ${pop}%
+    `;
   } catch (error) {
-    console.error('Server error occurred:', error.message);
-    console.error('Full Error Details:', error.response ? error.response.data : error);
-    res.status(500).json({ error: 'Unable to fetch weather data' });
+    console.error('Weather fetch error:', error);
+    const weatherElement = document.getElementById('weather');
+    weatherElement.textContent = `Weather unavailable`;
   }
 }
