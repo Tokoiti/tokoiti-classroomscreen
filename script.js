@@ -57,6 +57,51 @@ async function updateWeather() {
 updateWeather(); // Run once at startup
 setInterval(updateWeather, 60000); // Run every minute
 
+interact('.widget')
+  .draggable({
+    listeners: {
+      start (event) {
+        console.log(event.type, event.target);
+      },
+      move (event) {
+        const target = event.target;
+        const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+        const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+        target.style.transform = `translate(${x}px, ${y}px)`;
+
+        target.setAttribute('data-x', x);
+        target.setAttribute('data-y', y);
+      }
+    }
+  })
+  .resizable({
+    edges: { left: true, right: true, bottom: true, top: true },
+    listeners: {
+      move (event) {
+        let { x, y } = event.target.dataset;
+
+        x = parseFloat(x) || 0;
+        y = parseFloat(y) || 0;
+
+        Object.assign(event.target.style, {
+          width: `${event.rect.width}px`,
+          height: `${event.rect.height}px`,
+          transform: `translate(${x + event.deltaRect.left}px, ${y + event.deltaRect.top}px)`
+        });
+
+        event.target.dataset.x = x + event.deltaRect.left;
+        event.target.dataset.y = y + event.deltaRect.top;
+      }
+    },
+    modifiers: [
+      interact.modifiers.restrictSize({
+        min: { width: 100, height: 50 },
+        max: { width: 800, height: 600 }
+      })
+    ],
+    inertia: true
+  });
 
 
 
