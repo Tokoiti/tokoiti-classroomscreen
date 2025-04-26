@@ -150,17 +150,22 @@ function makeGroups(button) {
   output.innerHTML = `<strong>Group:</strong> ${names.join(', ')}`;
 }
 
+// Sound Meter Setup
 async function setupSoundMeter() {
-  const soundBarContainer = document.getElementById('sound-meter');
-
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const analyser = audioContext.createAnalyser();
     const microphone = audioContext.createMediaStreamSource(stream);
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
     microphone.connect(analyser);
+
+    const soundBar = document.getElementById('sound-bar');
+    const soundBarContainer = document.getElementById('sound-meter');
+
+    soundBarContainer.style.display = 'block'; // Make sure it's visible now
 
     function updateSoundBar() {
       analyser.getByteTimeDomainData(dataArray);
@@ -172,7 +177,6 @@ async function setupSoundMeter() {
       }
       const volume = Math.sqrt(sum / dataArray.length);
 
-      const soundBar = document.getElementById('sound-bar');
       const volumeWidth = Math.min(volume * 1000, 100);
       soundBar.style.width = volumeWidth + '%';
 
@@ -190,9 +194,10 @@ async function setupSoundMeter() {
     updateSoundBar();
   } catch (error) {
     console.error('Microphone access denied or not available.', error);
-    soundBarContainer.style.display = 'none';
+    document.getElementById('sound-meter').style.display = 'none';
   }
 }
+
 
 window.addEventListener('load', () => {
   updateClockAndDate();
