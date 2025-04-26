@@ -1,27 +1,24 @@
 import axios from 'axios';
 
 export default async function handler(req, res) {
-  const apiKey = '27654027f6761d87e2a5143e7733d7c9';
-  const lat = '-46.1213';
+  const apiKey = '27654027f6761d87e2a5143e7733d7c9'; // Your API key
+  const lat = '-46.1213'; // Tokoiti School
   const lon = '169.9609';
 
-  const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,daily,alerts&units=metric&appid=${apiKey}`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`;
 
   try {
     console.log("Requesting weather data from:", url);
 
     const response = await axios.get(url);
-
-    console.log("Weather API response received.");
-
     const data = response.data;
 
     const result = {
-      temp: Math.round(data.current.temp),
-      description: data.current.weather[0].main,
-      uvIndex: data.current.uvi,
-      pop: Math.round((data.hourly[0].pop || 0) * 100),
-      icon: data.current.weather[0].icon
+      temp: Math.round(data.main.temp),
+      description: data.weather[0].main,
+      uvIndex: "N/A", // (Not available from this endpoint — optional)
+      pop: "N/A", // (No rain probability in this endpoint — optional)
+      icon: data.weather[0].icon
     };
 
     res.status(200).json(result);
