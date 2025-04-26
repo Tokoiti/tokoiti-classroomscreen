@@ -53,7 +53,9 @@ async function updateWeather() {
     weatherElement.textContent = `Weather unavailable`;
   }
 }
-
+// --- AUTO-UPDATE ---
+updateWeather(); // Run once at startup
+setInterval(updateWeather, 60000); // Run every minute
 
 
 
