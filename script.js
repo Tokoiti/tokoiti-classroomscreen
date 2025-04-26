@@ -12,6 +12,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const notesRef = db.ref('stickyNotes');
+const pointsRef = db.ref('pointsTrackers');
+
 
 function updateClockAndDate() {
   const now = new Date();
@@ -103,30 +105,76 @@ interact('.widget')
     inertia: true
   });
 
-
-
-
-function saveNotesToFirebase() {
-  const notes = [];
-  document.querySelectorAll('.sticky-note-textarea').forEach(textarea => {
-    notes.push(textarea.value);
-  });
-  notesRef.set(notes);
-}
-
-function loadNotesFromFirebase() {
-  notesRef.on('value', (snapshot) => {
-    const notes = snapshot.val() || [];
-    document.getElementById('widgets').innerHTML = '';
-
-    notes.forEach(noteText => {
-      const noteHTML = `<div><h3>📝 Sticky Note</h3><textarea class="sticky-note-textarea" style="width: 100%; height: 100px;">${noteText}</textarea></div>`;
-      createWidget(noteHTML);
+  function savePointsToFirebase() {
+    const points = [];
+    document.querySelectorAll('.points-score').forEach(scoreDiv => {
+      const container = scoreDiv.closest('.widget');
+      const title = container.querySelector('.editable-title') ? container.querySelector('.editable-title').textContent : "Points";
+      
+      points.push({
+        title: title,
+        score: parseInt(scoreDiv.textContent, 10)
+      });
     });
+    pointsRef.set(points);
+  }
+  
+  function loadPointsFromFirebase() {
+    pointsRef.on('value', (snapshot) => {
+      const points = snapshot.val() || [];
+      points.forEach(point => {
+        const pointsHTML = `
+          <div>
+            <h3 contenteditable="true" class="editable-title">${point.title}</h3>
+            <div class="points-score">${point.score}</div>
+            <button onclick="changePoints(this, 1)">+1</button>
+            <button onclick="changePoints(this, -1)">-1</button>
+          </div>`;
+        createWidget(pointsHTML);
+      });
+    });
+  }
+  
 
-    attachNoteListeners();
-  });
-}
+  function saveNotesToFirebase() {
+    const notes = [];
+    document.querySelectorAll('.sticky-note-textarea').forEach(textarea => {
+      const container = textarea.closest('.widget');
+      const title = container.querySelector('.editable-title') ? container.querySelector('.editable-title').textContent : "Sticky Note";
+      const fontSize = textarea.style.fontSize || "16px";
+      
+      notes.push({
+        title: title,
+        text: textarea.value,
+        fontSize: fontSize
+      });
+    });
+    notesRef.set(notes);
+  }
+  
+
+  function loadNotesFromFirebase() {
+    notesRef.on('value', (snapshot) => {
+      const notes = snapshot.val() || [];
+      document.getElementById('widgets').innerHTML = '';
+  
+      notes.forEach(note => {
+        const noteHTML = `
+          <div>
+            <h3 contenteditable="true" class="editable-title">${note.title}</h3>
+            <div>
+              <button onclick="changeFontSize(this, 1)">🔼</button>
+              <button onclick="changeFontSize(this, -1)">🔽</button>
+            </div>
+            <textarea class="sticky-note-textarea" style="width: 100%; height: 100px; font-size: ${note.fontSize || '16px'};">${note.text}</textarea>
+          </div>`;
+        createWidget(noteHTML);
+      });
+  
+      attachNoteListeners();
+    });
+  }
+  
 function saveWidgetStateFirebase(target) {
   const id = target.id || target.dataset.id;
   if (!id) return; // Skip if no ID
@@ -281,7 +329,9 @@ function changePoints(button, amount) {
   let score = parseInt(scoreDiv.textContent, 10);
   score += amount;
   scoreDiv.textContent = score;
+  savePointsToFirebase();
 }
+
 
 function addGroupMaker() {
   const groupHTML = `<div><h3>👥 Group Maker</h3><textarea placeholder="Enter names, one per line..." style="width: 100%; height: 100px;"></textarea><button onclick="makeGroups(this)">Make Groups</button><div class="groups-output"></div></div>`;
@@ -355,6 +405,8 @@ window.addEventListener('load', () => {
   setInterval(updateWeather, 600000);
 
   loadNotesFromFirebase();
+  loadPointsFromFirebase();
+
   document.querySelectorAll('.widget').forEach(widget => {
     loadWidgetStateFirebase(widget);
   });
