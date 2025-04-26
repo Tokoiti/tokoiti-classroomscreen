@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default async function handler(req, res) {
-  const apiKey = 'YOUR-NEW-API-KEY'; // (keep using your working one)
+  const apiKey = '27654027f6761d87e2a5143e7733d7c9'; // (keep using your working one)
   const lat = '-46.1213';
   const lon = '169.9609';
 
