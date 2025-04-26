@@ -37,15 +37,15 @@ async function updateWeather() {
     const temp = data.temp;
     const description = data.description;
     const uvIndex = data.uvIndex;
-    const pop = data.pop;
+    const rainForecast = data.rainForecast;
     const icon = data.icon;
 
-    const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`; // 🌦️ Here's the icon URL
+    const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
 
     const weatherElement = document.getElementById('weather');
     weatherElement.innerHTML = `
       <img src="${iconUrl}" alt="${description}" style="vertical-align: middle; width: 30px; height: 30px; margin-right: 8px;">
-      ${temp}°C ${description} - UV ${uvIndex} - Rain ${pop}%
+      ${temp}°C ${description} - UV ${uvIndex} - Rain Forecast: ${rainForecast}
     `;
   } catch (error) {
     console.error('Weather fetch error:', error);
@@ -53,6 +53,7 @@ async function updateWeather() {
     weatherElement.textContent = `Weather unavailable`;
   }
 }
+
 
 
 
